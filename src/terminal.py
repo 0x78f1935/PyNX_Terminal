@@ -54,6 +54,7 @@ class Terminal():
         self.CONSOLE_TEXT = "None"
         self.version_number = '0.1'
         self.keyboard_toggled = False
+        self.setting_toggle = False
         self.user_input = ""
         self.CAPS = False
         self.SYS = False
@@ -120,6 +121,12 @@ class Terminal():
         else:
             self.SYS = True
 
+    def settings(self):
+        if self.setting_toggle:
+            self.setting_toggle = False
+        else:
+            self.setting_toggle = True
+
     def keyboard_key(self, key:str, same_line=False, *, default:str=None, color=None):
         if same_line:
             imgui.same_line()
@@ -143,7 +150,6 @@ class Terminal():
                 self.sys_key()
             elif default == 'TAB':
                 self.command = self.command + '    '
-
         imgui.pop_style_color(1)
 
     def main(self):
@@ -162,7 +168,7 @@ class Terminal():
             imgui.text("PyNx Terminal By PuffDip" + " - V" + str(self.version_number))
 
             # Body
-            if self.keyboard_toggled:
+            if self.keyboard_toggled or self.setting_toggle:
                 imgui.begin_child("region", -5, -480, border=True)
             else:
                 imgui.begin_child("region", -5, -120, border=True)
@@ -170,45 +176,54 @@ class Terminal():
             imgui.end_child()
 
             imgui.begin_group()
-            # Keyboard
-            try:
-                if self.keyboard_toggled:
-                    if self.SYS:
-                        keyboard = self.sys_keyboard
-                    else:
-                        keyboard = self.keyboard
+            if not self.setting_toggle:
+                # Keyboard
+                try:
+                    if self.keyboard_toggled:
+                        if self.SYS:
+                            keyboard = self.sys_keyboard
+                        else:
+                            keyboard = self.keyboard
 
-                    for rows in keyboard:
-                        for row in rows:
-                            if row == 'TAB' or row == 'SYS' or row == 'SHIFT':
-                                self.keyboard_key(row, False, default=row, color=self.KEY_FUNC_COLOR)
-                            elif row == '`' or row == '~':
-                                self.keyboard_key(row, False)
-                            else:
-                                self.keyboard_key(row, True)
+                        for rows in keyboard:
+                            for row in rows:
+                                if row == 'TAB' or row == 'SYS' or row == 'SHIFT':
+                                    self.keyboard_key(row, False, default=row, color=self.KEY_FUNC_COLOR)
+                                elif row == '`' or row == '~':
+                                    self.keyboard_key(row, False)
+                                else:
+                                    self.keyboard_key(row, True)
 
-                    imgui.same_line()
+                        imgui.same_line()
 
-                    imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
-                    if imgui.button("BACKSPACE", width=135, height=60):
-                        self.command = self.command[:-1]
-                    imgui.pop_style_color(1)
+                        imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
+                        if imgui.button("BACKSPACE", width=135, height=60):
+                            self.command = self.command[:-1]
+                        imgui.pop_style_color(1)
 
-                    imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
-                    if imgui.button("SPACE", width=970, height=50):
-                        self.command = self.command + " "
-                    imgui.pop_style_color(1)
+                        imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
+                        if imgui.button("SPACE", width=970, height=50):
+                            self.command = self.command + " "
+                        imgui.pop_style_color(1)
 
-                    imgui.same_line()
+                        imgui.same_line()
 
-                    imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
-                    if imgui.button("ENTER", width=150, height=50):
-                        self.command = self.command + "\n"
-                    imgui.pop_style_color(1)
+                        imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
+                        if imgui.button("ENTER", width=150, height=50):
+                            self.command = self.command + "\n"
+                        imgui.pop_style_color(1)
 
-            except Exception as e:
-                logging.error(e)
-                self.CONSOLE_TEXT = str(e)
+                except Exception as e:
+                    logging.error(e)
+                    self.CONSOLE_TEXT = str(e)
+            else:
+                # Settings
+                try:
+                    pass
+                except Exception as e:
+                    logging.error(e)
+                    self.CONSOLE_TEXT = str(e)
+
             imgui.end_group()
 
             # Command line
@@ -221,8 +236,6 @@ class Terminal():
             command = self.command
             imgui.text(command)
             imgui.end_child()
-
-
 
             # Buttons
             imgui.same_line()
@@ -249,11 +262,16 @@ class Terminal():
                     self.keyboard_toggled = False
                 else:
                     self.keyboard_toggled = True
+                    if self.setting_toggle:
+                        self.setting_toggle = False
             imgui.pop_style_color(1)
 
-            imgui.text('You wrote:')
             imgui.same_line()
-            imgui.text(command)
+
+            imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
+            if imgui.button("S", width=40, height=40):
+                self.settings()
+            imgui.pop_style_color(1)
 
             imgui.end()
             imgui.render()
