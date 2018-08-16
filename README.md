@@ -15,9 +15,5 @@ At this moment only the stdout shows. So no error output or anything. Ofcourse y
 This scene is pretty new. And the devs of PyNX do their best to support a fully functional Python for the switch.
 However at this moment in time the python package is somewhat limited. I hope it is understandable.
 
-#### `Bugs`
-Please, whatever you do. Don't use touchscreen yet. You may end up with a switch that needs a restart because it freezes.
-Their is already a issue open to tackle this problem. `Currently only the controllers are supported within the terminal.`
-
 #### Installation
 Copy PyNX_Terminal to your homebrew folder.

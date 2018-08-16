@@ -165,6 +165,13 @@ class Terminal():
                         self.command = self.command + " "
                     imgui.pop_style_color(1)
 
+                    imgui.same_line()
+
+                    imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
+                    if imgui.button("ENTER", width=150, height=50):
+                        self.command = self.command + "\n"
+                    imgui.pop_style_color(1)
+
             except Exception as e:
                 logging.error(e)
                 self.CONSOLE_TEXT = str(e)
@@ -172,13 +179,16 @@ class Terminal():
 
             # Command line
             imgui.text("Keyboard: {} | Shift: {} | SYS: {}".format(self.keyboard_toggled, self.CAPS, self.SYS))
-            
-            changed, command = imgui.input_text(
-                label='',
-                value=self.command,
-                buffer_length=256,
-                flags=imgui.INPUT_TEXT_AUTO_SELECT_ALL
+
+            imgui.begin_child(
+                "Child 2", height=70, width=-500, border=True,
+                flags=imgui.WINDOW_ALWAYS_VERTICAL_SCROLLBAR
             )
+            command = self.command
+            imgui.text(command)
+            imgui.end_child()
+
+
 
             # Buttons
             imgui.same_line()
@@ -188,8 +198,8 @@ class Terminal():
                 with stdoutIO() as s:
                     try:
                         exec(command)
-                    except:
-                        self.CONSOLE_TEXT = "Something wrong with the code"
+                    except Exception as e:
+                        self.CONSOLE_TEXT = e
                 self.CONSOLE_TEXT = s.getvalue()
             imgui.pop_style_color(1)
 
