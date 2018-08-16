@@ -21,6 +21,15 @@ def stdoutIO(stdout=None):
     yield stdout
     sys.stdout = old
 
+@contextlib.contextmanager
+def stderrIO(stderr=None):
+    old = sys.stdout
+    if stderr is None:
+        stderr = StringIO()
+    sys.stderr = stderr
+    yield stderr
+    sys.stderr = old
+
 class Terminal():
     def colorToFloat(self, t):
         nt = ()
@@ -63,6 +72,31 @@ class Terminal():
             ['SYS', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ':', '"', '|'],
             ['SHIFT', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '<', '>', '?']
         ]
+
+    def run_code(self, code):
+        old_stdout = sys.stdout
+        old_stderr = sys.stderr
+        redirected_output = sys.stdout = StringIO()
+        redirected_error = sys.stderr = StringIO()
+
+        ns_globals = {}
+        ns_locals = {}
+        out, err, exc = None, None, None
+
+        try:
+            exec(code, ns_globals, ns_locals)
+        except:
+            import traceback
+            exc = traceback.format_exc()
+
+        out = redirected_output.getvalue()
+        err = redirected_error.getvalue()
+
+        # reset outputs to the original values
+        sys.stdout = old_stdout
+        sys.stderr = old_stderr
+
+        return out, err, exc
 
     def run_python_module(self, path: str):
         # clear both buffers
@@ -181,7 +215,7 @@ class Terminal():
             imgui.text("Keyboard: {} | Shift: {} | SYS: {}".format(self.keyboard_toggled, self.CAPS, self.SYS))
 
             imgui.begin_child(
-                "Child 2", height=70, width=-500, border=True,
+                "Input", height=70, width=-500, border=True,
                 flags=imgui.WINDOW_ALWAYS_VERTICAL_SCROLLBAR
             )
             command = self.command
@@ -195,12 +229,16 @@ class Terminal():
 
             imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_COLOR)
             if imgui.button("Confirm", width=200, height=60):
-                with stdoutIO() as s:
-                    try:
-                        exec(command)
-                    except Exception as e:
-                        self.CONSOLE_TEXT = e
-                self.CONSOLE_TEXT = s.getvalue()
+
+                out, err, exc = self.run_code(command)
+
+                if out:
+                    self.CONSOLE_TEXT = out
+                if err:
+                    self.CONSOLE_TEXT = err
+                if exc:
+                    self.CONSOLE_TEXT = exc
+
             imgui.pop_style_color(1)
 
             imgui.same_line()

@@ -15,5 +15,14 @@ At this moment only the stdout shows. So no error output or anything. Ofcourse y
 This scene is pretty new. And the devs of PyNX do their best to support a fully functional Python for the switch.
 However at this moment in time the python package is somewhat limited. I hope it is understandable.
 
+##### Terminal capabilities
+* STDOUT
+* STDERR
+* Multi line support
+* Function support
+* Class support
+* Touch support
+* Controller support
+
 #### Installation
 Copy PyNX_Terminal to your homebrew folder.
