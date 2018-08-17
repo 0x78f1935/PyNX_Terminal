@@ -51,14 +51,15 @@ class Terminal():
         self.renderer = NXRenderer()
         self.currentDir = os.getcwd()
 
-        self.CONSOLE_TEXT = "None"
+        self.CONSOLE_TEXT = "Python {} on Nintendo Switch".format(sys.version)
         self.version_number = '0.1'
         self.keyboard_toggled = False
         self.setting_toggle = False
-        self.user_input = ""
+        self.user_input = [self.CONSOLE_TEXT]
         self.CAPS = False
         self.SYS = False
-        self.command = 'Please, type your command here.'
+        self.TAB = False
+        self.command = '\n>>>'
 
         self.keyboard = [
             ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='],
@@ -75,6 +76,7 @@ class Terminal():
         ]
 
     def run_code(self, code):
+        code = code.replace('>>>', '')
         old_stdout = sys.stdout
         old_stderr = sys.stderr
         redirected_output = sys.stdout = StringIO()
@@ -140,7 +142,7 @@ class Terminal():
         imgui.push_style_color(imgui.COLOR_BUTTON, *color)
         if imgui.button(key, width=60, height=60):
             if default is None:
-                if self.command == 'Please, type your command here.':
+                if self.command == '':
                     self.command = key
                 else:
                     self.command = self.command + key
@@ -149,6 +151,9 @@ class Terminal():
             elif default == 'SYS':
                 self.sys_key()
             elif default == 'TAB':
+                if self.TAB == False:
+                    self.command = self.command.replace('>>>', '>>>\n')
+                    self.TAB = True
                 self.command = self.command + '    '
         imgui.pop_style_color(1)
 
@@ -172,7 +177,7 @@ class Terminal():
                 imgui.begin_child("region", -5, -480, border=True)
             else:
                 imgui.begin_child("region", -5, -120, border=True)
-            imgui.text(self.CONSOLE_TEXT)
+            imgui.text("\n\n".join(self.user_input) + self.command)
             imgui.end_child()
 
             imgui.begin_group()
@@ -216,13 +221,18 @@ class Terminal():
                 except Exception as e:
                     logging.error(e)
                     self.CONSOLE_TEXT = str(e)
+                    self.user_input.append(self.CONSOLE_TEXT)
             else:
                 # Settings
                 try:
-                    pass
+                    imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
+                    if imgui.button("File System", width=150, height=50):
+                        self.run_python_module('main.py')
+                    imgui.pop_style_color(1)
                 except Exception as e:
                     logging.error(e)
                     self.CONSOLE_TEXT = str(e)
+                    self.user_input.append(self.CONSOLE_TEXT)
 
             imgui.end_group()
 
@@ -242,6 +252,8 @@ class Terminal():
 
             imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_COLOR)
             if imgui.button("Confirm", width=200, height=60):
+                if self.TAB:
+                    self.TAB = False
 
                 out, err, exc = self.run_code(command)
 
@@ -252,6 +264,9 @@ class Terminal():
                 if exc:
                     self.CONSOLE_TEXT = exc
 
+                self.user_input.append(command)
+                self.user_input.append(self.CONSOLE_TEXT)
+                self.command = '\n>>>'
             imgui.pop_style_color(1)
 
             imgui.same_line()
