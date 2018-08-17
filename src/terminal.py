@@ -140,7 +140,7 @@ class Terminal():
             color = self.KEY_COLOR
 
         imgui.push_style_color(imgui.COLOR_BUTTON, *color)
-        if imgui.button(key, width=60, height=60):
+        if imgui.button(key, width=80, height=60):
             if default is None:
                 if self.command == '':
                     self.command = key
@@ -174,9 +174,9 @@ class Terminal():
 
             # Body
             if self.keyboard_toggled or self.setting_toggle:
-                imgui.begin_child("region", -5, -480, border=True)
+                imgui.begin_child("region", -5, -430, border=True)
             else:
-                imgui.begin_child("region", -5, -120, border=True)
+                imgui.begin_child("region", -5, -110, border=True)
             imgui.text("\n\n".join(self.user_input) + self.command)
             imgui.end_child()
 
@@ -202,8 +202,8 @@ class Terminal():
                         imgui.same_line()
 
                         imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
-                        if imgui.button("BACKSPACE", width=135, height=60):
-                            self.command = self.command[:-1]
+                        if imgui.button("ENTER", width=135, height=60):
+                            self.command = self.command + "\n"
                         imgui.pop_style_color(1)
 
                         imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
@@ -214,8 +214,8 @@ class Terminal():
                         imgui.same_line()
 
                         imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
-                        if imgui.button("ENTER", width=150, height=50):
-                            self.command = self.command + "\n"
+                        if imgui.button("BACKSPACE", width=150, height=50):
+                            self.command = self.command[:-1]
                         imgui.pop_style_color(1)
 
                 except Exception as e:
