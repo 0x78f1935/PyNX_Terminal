@@ -202,13 +202,20 @@ class Terminal():
                         imgui.same_line()
 
                         imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
-                        if imgui.button("ENTER", width=135, height=60):
+                        if imgui.button("ENTER", width=175, height=60):
                             self.command = self.command + "\n"
                         imgui.pop_style_color(1)
 
                         imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
                         if imgui.button("SPACE", width=970, height=50):
                             self.command = self.command + " "
+                        imgui.pop_style_color(1)
+
+                        imgui.same_line()
+
+                        imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
+                        if imgui.button("CLEAR", width=80, height=50):
+                            self.command = '\n>>>'
                         imgui.pop_style_color(1)
 
                         imgui.same_line()
@@ -251,6 +258,18 @@ class Terminal():
             imgui.same_line()
 
             imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_COLOR)
+            if imgui.button("Keyboard", width=200, height=60):
+                if self.keyboard_toggled:
+                    self.keyboard_toggled = False
+                else:
+                    self.keyboard_toggled = True
+                    if self.setting_toggle:
+                        self.setting_toggle = False
+            imgui.pop_style_color(1)
+
+            imgui.same_line()
+
+            imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_COLOR)
             if imgui.button("Confirm", width=200, height=60):
                 if self.TAB:
                     self.TAB = False
@@ -267,18 +286,6 @@ class Terminal():
                 self.user_input.append(command)
                 self.user_input.append(self.CONSOLE_TEXT)
                 self.command = '\n>>>'
-            imgui.pop_style_color(1)
-
-            imgui.same_line()
-
-            imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_COLOR)
-            if imgui.button("Keyboard", width=200, height=60):
-                if self.keyboard_toggled:
-                    self.keyboard_toggled = False
-                else:
-                    self.keyboard_toggled = True
-                    if self.setting_toggle:
-                        self.setting_toggle = False
             imgui.pop_style_color(1)
 
             imgui.same_line()
