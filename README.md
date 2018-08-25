@@ -7,6 +7,7 @@ Currently, **Python 3.5** is supported.
 
 You can find the source of PyNX [here](https://github.com/nx-python/PyNX).
 However, this package already contains a pre-build version of PyNX.
+click [here](https://github.com/Annihilator708/PyNX_Terminal/releases) to checkout the [latest release](https://github.com/Annihilator708/PyNX_Terminal/releases).
 
 
 #### Terminal
