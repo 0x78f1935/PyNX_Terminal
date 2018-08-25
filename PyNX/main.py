@@ -119,9 +119,10 @@ def main():
         imgui.render()
         renderer.render()
 
-    renderer.shutdown()
     t = terminal.Terminal()
     t.main()
+    renderer.shutdown()
+
 
 
 if __name__ == "__main__":
