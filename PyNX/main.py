@@ -83,8 +83,7 @@ def main():
 
         imgui.push_style_color(imgui.COLOR_BUTTON, *APP_COLOR)
         if imgui.button("Terminal", width=200, height=60):
-            t = terminal.Terminal()
-            t.main()
+            break
         imgui.pop_style_color(1)
 
         for e in dirs:
@@ -121,6 +120,8 @@ def main():
         renderer.render()
 
     renderer.shutdown()
+    t = terminal.Terminal()
+    t.main()
 
 
 if __name__ == "__main__":
