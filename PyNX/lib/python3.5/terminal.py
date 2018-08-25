@@ -234,7 +234,7 @@ class Terminal():
                 try:
                     imgui.push_style_color(imgui.COLOR_BUTTON, *self.KEY_FUNC_COLOR)
                     if imgui.button("File System", width=150, height=50):
-                        self.run_python_module('main.py')
+                        break
                     imgui.pop_style_color(1)
                 except Exception as e:
                     logging.error(e)
@@ -299,4 +299,5 @@ class Terminal():
             imgui.render()
             self.renderer.render()
 
+        self.run_python_module('main.py')
         self.renderer.shutdown()
