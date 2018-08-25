@@ -28,6 +28,9 @@ However at this moment in time the python package is somewhat limited. I hope it
 Copy PyNX_Terminal to your homebrew folder.
 
 ## Screenshots
+
+`depricated screenshots`
+
 [Terminal1]: https://media.discordapp.net/attachments/424223060107853827/479710805382791179/unknown.png "Terminal"
 [Terminal2]: https://media.discordapp.net/attachments/424223060107853827/479711075055697920/unknown.png "Terminal"
 [Terminal3]: https://media.discordapp.net/attachments/424223060107853827/479711284003209216/unknown.png "Terminal"
