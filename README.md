@@ -30,11 +30,11 @@ Copy PyNX_Terminal to your homebrew folder.
 
 ## Screenshots
 `Screenshots version 0.2A`
-[Terminal1]: https://cdn.discordapp.com/attachments/449699759490334720/484928028728754178/2018083022454500-DB1426D1DFD034027CECDE9C2DD914B8.png "Terminal"
-[Terminal2]: https://cdn.discordapp.com/attachments/449699759490334720/484928060974694401/2018083105203300-DB1426D1DFD034027CECDE9C2DD914B8.png "Terminal"
+[Keyboard]: https://cdn.discordapp.com/attachments/449699759490334720/484928028728754178/2018083022454500-DB1426D1DFD034027CECDE9C2DD914B8.png "Terminal"
+[Settinigs]: https://cdn.discordapp.com/attachments/449699759490334720/484928060974694401/2018083105203300-DB1426D1DFD034027CECDE9C2DD914B8.png "Terminal"
 
-![Keyboard][Terminal1]
-![Settings/tests][Terminal2]
+![Keyboard][Keyboard]
+![Settings/tests][Settinigs]
 
 `depricated screenshots version 0.1`
 
